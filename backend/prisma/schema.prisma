@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL_SUPABASE")
+}
+
+enum UserRole {
+  ADMIN
+  PROJECT_LEAD
+  DEVELOPER
+}
+
+enum ProjectStatus {
+  PLANNED
+  ACTIVE
+  COMPLETED
+  ON_HOLD
+  CANCELLED
+}
+
+model Users {
+  id           String    @id @default(uuid())
+  name         String?
+  email        String    @unique
+  passwordHash String
+  role         UserRole
+  createdAt    DateTime  @default(now())
+  projects     Projects[]     @relation("CreatedProjects")
+  assignments  Assignments[]
+  assignedBy Assignments[] @relation("AssignedBy")
+  documents    Documents[]    @relation("UploadedByDocuments")
+}
+
+model Projects {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  deadline    DateTime
+  status      ProjectStatus
+  createdBy   String
+  createdByUser Users     @relation("CreatedProjects", fields: [createdBy], references: [id])
+  assignments Assignments[]
+  documents   Documents[]
+}
+
+model Assignments {
+  id         String   @id @default(uuid())
+  projectId  String
+  userId     String
+  assignedBy String
+  assignedAt DateTime
+  project    Projects @relation(fields: [projectId], references: [id])
+  user       Users    @relation(fields: [userId], references: [id])
+  assignedByUser Users @relation("AssignedBy", fields: [assignedBy], references: [id])
+}
+
+model Documents {
+  id         String   @id @default(uuid())
+  projectId  String
+  fileName   String
+  filePath   String
+  uploadedBy String
+  uploadDate DateTime
+  project    Projects @relation(fields: [projectId], references: [id])
+  uploadedByUser Users @relation("UploadedByDocuments", fields: [uploadedBy], references: [id])
+}
