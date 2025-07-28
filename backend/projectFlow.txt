@@ -5,9 +5,14 @@ Dashboard:
     but / projectDetails  me baki info dikhana hai 
 } ✅
 
-2 create a new product into Dashboard ✅
-3 update a product into Dashboard
-4 delete a product into Dashboard
+2 create a new product into Dashboard ✅ 
+3 update a product into Dashboard (progress) ✅
+4 delete a product into Dashboard ✅
+
+Assign Team Members: Project Leads can assign developers to their specific
+projects. 
+
+b. View Assigned Projects: Developers can see a list of projects they are currently 
 
 
 

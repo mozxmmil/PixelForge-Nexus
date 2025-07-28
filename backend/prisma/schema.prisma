@@ -1,23 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL_SUPABASE")
-}
-
-enum UserRole {
- PROJECT_LEAD @map("Project Lead")
-  ADMIN     @map("ADMIN")
-  DEVELOPER    @map("Developer")
 }
 
 enum ProjectStatus {
@@ -85,5 +72,13 @@ model Documents {
   uploadDate DateTime
   project    Projects @relation(fields: [projectId], references: [id])
   uploadedByUser Users @relation("UploadedByDocuments", fields: [uploadedBy], references: [id])
+}
+
+
+
+enum UserRole {
+  PROJECT_LEAD @map("Project Lead")
+  ADMIN        @map("ADMIN")
+  DEVELOPER    @map("Developer")
 }
 

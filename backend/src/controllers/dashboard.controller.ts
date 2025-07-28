@@ -8,7 +8,7 @@ export const dashboard = async (req: Request, res: Response) => {
 	try {
 		if (user?.role === "ADMIN") {
 			const getProjects = await prismaClient.projects.findMany({});
-			console.log(getProjects);
+
 			if (!getProjects || getProjects.length === 0)
 				return res.status(404).json({
 					message: "project not found",
@@ -46,7 +46,7 @@ export const dashboard = async (req: Request, res: Response) => {
 					},
 				},
 			});
-			console.log(getProjects);
+
 			if (!getProjects || getProjects.length === 0)
 				return res.status(404).json({
 					message: "project not found",
@@ -66,15 +66,8 @@ export const dashboard = async (req: Request, res: Response) => {
 
 export const createProject = async (req: Request, res: Response) => {
 	const user = req.user;
-	const {
-		name,
-		description,
-		deadline,
-		status,
-		clientname,
-
-		clientphone,
-	} = req.body;
+	const { name, description, deadline, status, clientname, clientphone } =
+		req.body;
 	try {
 		const validData = createProjectSchema.safeParse({
 			name,
@@ -118,5 +111,52 @@ export const createProject = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error(error);
 		return errorHandler(error as Error | string, res);
+	}
+};
+
+export const updateProject = async (req: Request, res: Response) => {
+	const { id } = req.params;
+	const { name, description, deadline, status } = req.body;
+	try {
+		const updatedProject = await prismaClient.projects.update({
+			where: {
+				id: id as string,
+			},
+			data: {
+				name,
+				description,
+				deadline,
+				status,
+			},
+		});
+		return res.status(200).json({
+			success: true,
+			message: "project updated successfully",
+			data: updatedProject,
+		});
+	} catch (error) {
+		console.error(error);
+		return errorHandler(error as Error | string, res);
+	}
+};
+
+export const deleteProject = async (req: Request, res: Response) => {
+	const { id } = req.params;
+	if (!id) return res.status(400).json({ error: "project id is required" });
+	try {
+		const deletedProject = await prismaClient.projects.delete({
+			where: {
+				id,
+			},
+		});
+		console.log(deleteProject);
+		return res.status(200).json({
+			success: true,
+			message: "project deleted successfully",
+			data: deletedProject,
+		});
+	} catch (error) {
+		console.error(error);
+		errorHandler(error as Error | string, res);
 	}
 };

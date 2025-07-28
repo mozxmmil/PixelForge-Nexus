@@ -15,7 +15,7 @@ export const checkAuth = async (
 		if (!decoded.payload) {
 			return res.status(401).json({ error: "Unauthorized" });
 		}
-		console.log(decoded);
+		
 		const user = await prismaClient.users.findUnique({
 			where: { id: decoded.payload },
 		});
