@@ -47,7 +47,9 @@ export const singup = async (req: Request, res: Response) => {
 		});
 
 		jsonwebtoken.generateToken(user.id, res);
-		return res.status(200).json({ message: "Login successful" });
+		return res
+			.status(201)
+			.json({ message: "signup successful", success: true });
 	} catch (error) {
 		console.error(error);
 		errorHandler(error as string | Error, res);
@@ -81,3 +83,7 @@ export const login = async (req: Request, res: Response) => {
 	}
 };
 
+export const logout = async (req: Request, res: Response) => {
+	res.clearCookie("token");
+	return res.status(200).json({ message: "Logout successful" });
+};

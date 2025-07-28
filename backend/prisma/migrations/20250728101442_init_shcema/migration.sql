@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "UserRole" AS ENUM ('ADMIN', 'MEMBER', 'MANAGER');
+CREATE TYPE "UserRole" AS ENUM ('Project Lead', 'ADMIN', 'Developer');
 
 -- CreateEnum
 CREATE TYPE "ProjectStatus" AS ENUM ('PLANNED', 'ACTIVE', 'COMPLETED', 'ON_HOLD', 'CANCELLED');
@@ -7,13 +7,24 @@ CREATE TYPE "ProjectStatus" AS ENUM ('PLANNED', 'ACTIVE', 'COMPLETED', 'ON_HOLD'
 -- CreateTable
 CREATE TABLE "Users" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
+    "name" TEXT,
     "email" TEXT NOT NULL,
     "passwordHash" TEXT NOT NULL,
     "role" "UserRole" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Clientdata" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Clientdata_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -24,6 +35,7 @@ CREATE TABLE "Projects" (
     "deadline" TIMESTAMP(3) NOT NULL,
     "status" "ProjectStatus" NOT NULL,
     "createdBy" TEXT NOT NULL,
+    "clinetId" TEXT NOT NULL,
 
     CONSTRAINT "Projects_pkey" PRIMARY KEY ("id")
 );
@@ -56,6 +68,9 @@ CREATE UNIQUE INDEX "Users_email_key" ON "Users"("email");
 
 -- AddForeignKey
 ALTER TABLE "Projects" ADD CONSTRAINT "Projects_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "Users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Projects" ADD CONSTRAINT "Projects_clinetId_fkey" FOREIGN KEY ("clinetId") REFERENCES "Clientdata"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Assignments" ADD CONSTRAINT "Assignments_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Projects"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -18,7 +18,7 @@ export class jsonwebtoken {
 			throw new Error(error as string);
 		}
 	}
-	public static verifyToken(token: string): JwtPayload | undefined {
+	public static verifyToken(token: string): JwtPayload {
 		try {
 			const decoded = jwt.verify(
 				token,

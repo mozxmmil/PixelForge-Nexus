@@ -15,9 +15,9 @@ datasource db {
 }
 
 enum UserRole {
-  ADMIN
-  PROJECT_LEAD
-  DEVELOPER
+ PROJECT_LEAD @map("Project Lead")
+  ADMIN     @map("ADMIN")
+  DEVELOPER    @map("Developer")
 }
 
 enum ProjectStatus {
@@ -41,6 +41,16 @@ model Users {
   documents    Documents[]    @relation("UploadedByDocuments")
 }
 
+model Clientdata {
+    id String @id @default(uuid())
+    name String
+    phone String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    projects Projects[] @relation("clientInto")
+    
+    }
+
 model Projects {
   id          String    @id @default(uuid())
   name        String
@@ -49,6 +59,8 @@ model Projects {
   status      ProjectStatus
   createdBy   String
   createdByUser Users     @relation("CreatedProjects", fields: [createdBy], references: [id])
+  clinetId String
+  clientInfo Clientdata @relation("clientInto",fields: [clinetId],references: [id])
   assignments Assignments[]
   documents   Documents[]
 }
@@ -74,3 +86,4 @@ model Documents {
   project    Projects @relation(fields: [projectId], references: [id])
   uploadedByUser Users @relation("UploadedByDocuments", fields: [uploadedBy], references: [id])
 }
+
