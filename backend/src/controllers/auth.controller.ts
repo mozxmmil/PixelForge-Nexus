@@ -76,7 +76,9 @@ export const login = async (req: Request, res: Response) => {
 			return res.status(400).json({ error: "Invalid password" });
 
 		jsonwebtoken.generateToken(user.id, res);
-		return res.status(200).json({ message: "Login successful" });
+		return res
+			.status(200)
+			.json({ message: "Login successful", success: true });
 	} catch (error) {
 		console.error(error);
 		errorHandler(error as string | Error, res);

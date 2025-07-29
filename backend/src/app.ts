@@ -6,17 +6,17 @@ import { Server } from "socket.io";
 import cookieParser from "cookie-parser";
 import authRoute from "./routes/auth.route.js";
 import dashboardRoute from "./routes/dashboard.route.js";
-
+import cors from "cors";
 dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 3002;
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth", authRoute);
 app.use("/api/dashboard", dashboardRoute);
-
 const io = new Server(server, {
 	cors: {
 		origin: process.env.FRONTEND_URL,

@@ -7,10 +7,19 @@ export const dashboard = async (req: Request, res: Response) => {
 	const user = req.user;
 	try {
 		if (user?.role === "ADMIN") {
-			const getProjects = await prismaClient.projects.findMany({});
+			const getProjects = await prismaClient.projects.findMany({
+				include: {
+					clientInfo: {
+						select: {
+							id: true,
+							name: true,
+						},
+					},
+				},
+			});
 
 			if (!getProjects || getProjects.length === 0)
-				return res.status(404).json({
+				return res.status(200).json({
 					message: "project not found",
 					success: false,
 				});
@@ -25,9 +34,18 @@ export const dashboard = async (req: Request, res: Response) => {
 				where: {
 					createdBy: user.id,
 				},
+				include: {
+					clientInfo: {
+						select: {
+							id: true,
+							name: true,
+						},
+					},
+				},
 			});
+			
 			if (!getProjects || getProjects.length === 0)
-				return res.status(404).json({
+				return res.status(200).json({
 					message: "project not found",
 					success: false,
 				});
@@ -48,7 +66,7 @@ export const dashboard = async (req: Request, res: Response) => {
 			});
 
 			if (!getProjects || getProjects.length === 0)
-				return res.status(404).json({
+				return res.status(200).json({
 					message: "project not found",
 					success: false,
 				});

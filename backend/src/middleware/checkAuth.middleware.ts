@@ -12,12 +12,13 @@ export const checkAuth = async (
 	}
 	try {
 		const decoded = jsonwebtoken.verifyToken(token);
+		
 		if (!decoded.payload) {
 			return res.status(401).json({ error: "Unauthorized" });
 		}
-		
+
 		const user = await prismaClient.users.findUnique({
-			where: { id: decoded.payload },
+			where: { id: decoded.payload as string },
 		});
 
 		if (!user) {
