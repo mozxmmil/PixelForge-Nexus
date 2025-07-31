@@ -3,16 +3,16 @@
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import * as React from "react";
@@ -40,7 +40,7 @@ type Props = {
 export function Calendar28Controlled({
 	control,
 	name,
-	label = "Subscription Date",
+	label = "Deadline",
 }: Props) {
 	return (
 		<FormField

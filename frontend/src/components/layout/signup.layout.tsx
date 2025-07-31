@@ -19,6 +19,7 @@ import { LoaderCircle } from "lucide-react";
 import { axiosInstance } from "@/lib/axios";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const signUpSchema = z.object({
 	name: z.string().min(2, "Name is too short"),
@@ -152,6 +153,15 @@ const SignUpBox = () => {
 					</Button>
 				</form>
 			</Form>
+			<div className="mt-6 text-center text-sm text-neutral-700 dark:text-neutral-300">
+				Already have an account?{" "}
+				<Link
+					href="/login"
+					className="text-primary font-semibold hover:underline"
+				>
+					Login
+				</Link>
+			</div>
 		</div>
 	);
 };

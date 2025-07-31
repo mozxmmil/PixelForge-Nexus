@@ -1,32 +1,66 @@
-import { useEffect, useState } from "react";
 import { axiosInstance } from "@/lib/axios";
-import { Response } from "@/types/zod/projectData.type.zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+	FromSchema,
+	ProjectSummary,
+	Response,
+} from "@/types/zod/projectData.type.zod";
+import { toast } from "sonner";
+import { exportPages } from "next/dist/export/worker";
 
 export const useGetAllProject = () => {
-	const [data, setData] = useState<Response | null>(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
+	const data = useQuery<Response>({
+		queryKey: ["all-project"],
+		queryFn: async () => {
+			const response = await axiosInstance.get("/api/dashboard");
+			return response.data;
+		},
+	});
+	return data;
+};
 
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const response = await axiosInstance.get("/api/dashboard");
-				
-				if (response.data.success) {
-					setData(response.data);
-				}
-			} catch (err) {
-				if (err instanceof Error) {
-					setError(err.message);
-				} else {
-					setError("Something went wrong");
-				}
-			} finally {
-				setLoading(false);
-			}
-		};
-		fetchData();
-	}, []);
+export const useCreateProject = () => {
+	const client = useQueryClient();
+	const data = useMutation({
+		mutationFn: async (projectData: FromSchema) => {
+			console.log(projectData);
+			const response = await axiosInstance.post(
+				"/api/dashboard/createproject",
+				projectData
+			);
+			return response.data;
+		},
+		onSuccess: () => {
+			toast.success("project added");
+			client.invalidateQueries({ queryKey: ["all-project"] });
+		},
+		onError: (e) => {
+			toast.error(e.message);
+		},
+	});
+	return data;
+};
 
-	return { data, loading, error };
+export const useHeaderData = () => {
+	const data = useQuery<ProjectSummary>({
+		queryKey: ["header-data"],
+		queryFn: async () => {
+			const response = await axiosInstance.get("/api/dashboard/headerdata");
+			return response.data;
+		},
+	});
+	return data;
+};
+
+export const useHeaderMetaData = () => {
+	const data = useQuery<ProjectSummary>({
+		queryKey: ["header-sub-data"],
+		queryFn: async () => {
+			const response = await axiosInstance.get(
+				"/api/dashboard/headerSubData"
+			);
+			return response.data;
+		},
+	});
+	return data;
 };

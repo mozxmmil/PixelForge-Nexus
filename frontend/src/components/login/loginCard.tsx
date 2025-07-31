@@ -18,6 +18,7 @@ import { LoaderCircle } from "lucide-react";
 import { axiosInstance } from "@/lib/axios";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const loginSchema = z.object({
 	email: z.string().email("Invalid email address"),
@@ -114,6 +115,15 @@ const LoginBox = () => {
 					</Button>
 				</form>
 			</Form>
+			<div className="mt-6 text-center text-sm text-neutral-700 dark:text-neutral-300">
+				Don&apos;t have an account?{" "}
+				<Link
+					href="/signup"
+					className="text-primary font-semibold hover:underline"
+				>
+					Signup
+				</Link>
+			</div>
 		</div>
 	);
 };

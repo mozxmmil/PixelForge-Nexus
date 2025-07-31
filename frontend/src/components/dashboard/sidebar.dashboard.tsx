@@ -1,12 +1,10 @@
 "use client";
-import { useApplicationData } from "@/zustand/applicationData.zustand";
 import { Home, ListChecks, Settings, Users } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { buttonVariants } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 export default function DashboardSidebar() {
-	const { isOpen, setIsOpen } = useApplicationData((state) => state);
-	
 	return (
 		<aside className=" h-full bg-white border-r md:w-55  p-4 fixed top-0 left-0 z-40 hidden md:block dark:bg-neutral-900 ">
 			<div className="flex items-center justify-between">
@@ -15,12 +13,15 @@ export default function DashboardSidebar() {
 				</span>
 			</div>
 			<nav className="mt-8 flex-1 ">
-				<Button
-					onClick={() => setIsOpen(!isOpen)}
-					className="w-full mt-5 mb-5 hover:cursor-pointer "
+				<Link
+					href={"/dashboard/create-project"}
+					className={cn(
+						buttonVariants({ variant: "default" }),
+						"w-full mt-5 mb-5 hover:cursor-pointer"
+					)}
 				>
 					New Project
-				</Button>
+				</Link>
 				<ul className="space-y-2 ">
 					{navItems.map((item) => (
 						<li key={item.name}>

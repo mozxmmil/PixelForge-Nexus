@@ -26,6 +26,7 @@ model Users {
   assignments  Assignments[]
   assignedBy Assignments[] @relation("AssignedBy")
   documents    Documents[]    @relation("UploadedByDocuments")
+  devloper     Projects[]     
 }
 
 model Clientdata {
@@ -38,11 +39,15 @@ model Clientdata {
     
     }
 
+
 model Projects {
   id          String    @id @default(uuid())
   name        String
   description String
   deadline    DateTime
+  progress    Int @default(0)
+  tasks       Int @default(0)
+  devloper    Users []
   status      ProjectStatus
   createdBy   String
   createdByUser Users     @relation("CreatedProjects", fields: [createdBy], references: [id])
@@ -50,6 +55,8 @@ model Projects {
   clientInfo Clientdata @relation("clientInto",fields: [clinetId],references: [id])
   assignments Assignments[]
   documents   Documents[]
+  createdAt DateTime @default(now())
+
 }
 
 model Assignments {

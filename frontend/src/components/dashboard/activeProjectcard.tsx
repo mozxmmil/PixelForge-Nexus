@@ -23,7 +23,7 @@ export default function ActiveProjectCard({
 	active,
 }: ProjectCardProps) {
 	const date = new Date(deadline).toLocaleDateString();
-	
+
 	return (
 		<div className="bg-white rounded-lg shadow p-5 flex flex-col gap-2 min-w-[268px] dark:bg-neutral-900 hover:cursor-pointer hover:bg-neutral-100 dark:hover:outline outline-gray-600 hover:scale-101 transition-all duration-300">
 			<div className="flex justify-between items-center">
@@ -60,7 +60,7 @@ export default function ActiveProjectCard({
 				<span className="ml-1 font-bold">{members.name}</span>
 			</div>
 			<div className="text-xs text-gray-400">
-				{tasks}/{totalTasks} tasks
+				{tasks}/{totalTasks ? totalTasks : 0} tasks
 			</div>
 		</div>
 	);

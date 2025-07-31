@@ -17,28 +17,17 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { useCreateProject } from "@/hook/dashbord.hook";
+import { formSchema } from "@/types/zod/projectData.type.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LucideLoaderCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Calendar28Controlled } from "../layout/date";
 
-const formSchema = z.object({
-	name: z.string().min(2, {
-		message: "Name is Must.",
-	}),
-	description: z.string().min(2, {
-		message: "Description is Must.",
-	}),
-	deadline: z.date(),
-	clientname: z.string().min(2, {
-		message: "Client Name is Must.",
-	}),
-	clientphone: z.string().min(2, {
-		message: "Client Phone is Must.",
-	}),
-	status: z.enum(["PLANNED", "ACTIVE"]),
-});
 const CreateProjectDashboard = () => {
+	const { mutateAsync, isPending, isSuccess } = useCreateProject();
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -51,18 +40,19 @@ const CreateProjectDashboard = () => {
 		},
 	});
 
-	const onSubmit = (data: z.infer<typeof formSchema>) => {
-		console.log(data);
+	const onSubmit = async (data: z.infer<typeof formSchema>) => {
+		await mutateAsync(data);
+		if (isSuccess) form.reset();
 	};
 	return (
-		<div className="w-full h-screen bg-[rgba(0,0,0,0.5)] dark:bg-black absolute left-0 top-0 md:ml-55 overflow-hidden">
-			<div className="w-full h-full p-19">
+		<div className="w-full h-full md:ml-55 bg-[rgba(0,0,0,0.5)] dark:bg-zinc-900   overflow-hidden">
+			<div className="w-full h-full py-5 px-15">
 				<h1 className="text-2xl font-bold text-white ">Create Project</h1>
-				<div className="max-w-4xl p-3 mt-10 border rounded-lg">
+				<div className="max-w-4xl  mt-10 border rounded-lg bg-black">
 					<Form {...form}>
 						<form
 							onSubmit={form.handleSubmit(onSubmit)}
-							className="space-y-8"
+							className="space-y-8 p-10"
 						>
 							<FormField
 								control={form.control}
@@ -85,7 +75,7 @@ const CreateProjectDashboard = () => {
 										<FormLabel>Description</FormLabel>
 										<FormControl>
 											<textarea
-												className="resize-none"
+												className="resize-none rounded-sm"
 												placeholder="Description"
 												{...field}
 											/>
@@ -95,17 +85,17 @@ const CreateProjectDashboard = () => {
 								)}
 							/>
 
-							<div className="flex gap-2 w-full bg-red-400 items-center">
+							<div className="flex gap-2 w-full items-end justify-between">
 								<FormField
 									control={form.control}
 									name="deadline"
 									render={() => (
-										<FormItem className="w-full">
-											<FormLabel>Deadline</FormLabel>
+										<FormItem className="w-full ">
 											<FormControl>
 												<Calendar28Controlled
 													control={form.control}
 													name="deadline"
+													label="Deadline Date"
 												/>
 											</FormControl>
 											<FormMessage />
@@ -118,13 +108,12 @@ const CreateProjectDashboard = () => {
 									render={({ field }) => (
 										<FormItem className="w-full">
 											<FormLabel>Status</FormLabel>
-											<FormControl>
+											<FormControl className="w-full">
 												<Select
-                                                
 													onValueChange={field.onChange}
 													defaultValue={field.value}
 												>
-													<SelectTrigger>
+													<SelectTrigger className="w-1/2">
 														<SelectValue placeholder="ACTIVE" />
 													</SelectTrigger>
 													<SelectContent>
@@ -134,7 +123,6 @@ const CreateProjectDashboard = () => {
 														<SelectItem value="ACTIVE">
 															ACTIVE
 														</SelectItem>
-						
 													</SelectContent>
 												</Select>
 											</FormControl>
@@ -178,7 +166,13 @@ const CreateProjectDashboard = () => {
 									)}
 								/>
 							</div>
-							<Button type="submit">Submit</Button>
+
+							<Button type="submit">
+								Create Project
+								{isPending && (
+									<LucideLoaderCircle className="animate-spin" />
+								)}
+							</Button>
 						</form>
 					</Form>
 				</div>

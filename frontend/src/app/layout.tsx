@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/common/themeProvider";
 import { Toaster } from "@/components/ui/sonner";
+import TanStack from "@/components/common/tanstack";
 
 export const metadata: Metadata = {
 	title: "PixelForge Nexus",
@@ -15,15 +16,19 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<ThemeProvider
-				attribute="class"
-				defaultTheme="system"
-				enableSystem
-				disableTransitionOnChange
-			>
-				<Toaster />
-				<body>{children}</body>
-			</ThemeProvider>
+			<body>
+				<TanStack>
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="system"
+						enableSystem
+						disableTransitionOnChange
+					>
+						<Toaster />
+						<body>{children}</body>
+					</ThemeProvider>
+				</TanStack>
+			</body>
 		</html>
 	);
 }

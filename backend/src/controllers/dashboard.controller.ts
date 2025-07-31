@@ -43,7 +43,7 @@ export const dashboard = async (req: Request, res: Response) => {
 					},
 				},
 			});
-			
+
 			if (!getProjects || getProjects.length === 0)
 				return res.status(200).json({
 					message: "project not found",
@@ -177,4 +177,109 @@ export const deleteProject = async (req: Request, res: Response) => {
 		console.error(error);
 		errorHandler(error as Error | string, res);
 	}
+};
+
+export const headerData = async (req: Request, res: Response) => {
+	const [totalProject, activeTask, completedTask, teamMember] =
+		await Promise.all([
+			prismaClient.projects.count(),
+
+			prismaClient.projects.count({
+				where: {
+					status: {
+						in: ["ACTIVE", "PLANNED"],
+					},
+				},
+			}),
+			prismaClient.projects.count({
+				where: {
+					status: "COMPLETED",
+				},
+			}),
+			prismaClient.users.count(),
+		]);
+
+	return res.status(200).json({
+		success: true,
+		message: "all header data",
+		data: {
+			totalProject,
+			activeTask,
+			completedTask,
+			teamMember,
+		},
+	});
+};
+
+export const headerSubData = async (req: Request, res: Response) => {
+	const currentDate = new Date();
+	const lastDate = new Date(currentDate);
+	lastDate.setMonth(currentDate.getMonth() - 1);
+	const [totalProject, activeTask, totalMember, completedProject] =
+		await Promise.all([
+			prismaClient.projects.count({
+				where: {
+					createdAt: {
+						gte: lastDate,
+						lte: currentDate,
+					},
+				},
+			}),
+			prismaClient.projects.count({
+				where: {
+					AND: [
+						{
+							status: "ACTIVE",
+						},
+						{
+							createdAt: {
+								gte: lastDate,
+								lte: currentDate,
+							},
+						},
+					],
+				},
+			}),
+			prismaClient.users.count({
+				where: {
+					AND: [
+						{
+							role: "DEVELOPER",
+						},
+						{
+							createdAt: {
+								gte: lastDate,
+								lte: currentDate,
+							},
+						},
+					],
+				},
+			}),
+			prismaClient.projects.count({
+				where: {
+					AND: [
+						{
+							status: "COMPLETED",
+						},
+						{
+							createdAt: {
+								gte: lastDate,
+								lte: currentDate,
+							},
+						},
+					],
+				},
+			}),
+		]);
+
+	return res.status(200).json({
+		success: true,
+		message: "all header sub data",
+		data: {
+			totalProject,
+			activeTask,
+			totalMember,
+			completedProject,
+		},
+	});
 };
