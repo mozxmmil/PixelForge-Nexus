@@ -53,7 +53,7 @@ export const useHeaderData = () => {
 };
 
 export const useHeaderMetaData = () => {
-	const data = useQuery<ProjectSummary>({
+	const data = useQuery({
 		queryKey: ["header-sub-data"],
 		queryFn: async () => {
 			const response = await axiosInstance.get(
