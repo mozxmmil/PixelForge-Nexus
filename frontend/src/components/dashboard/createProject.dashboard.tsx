@@ -45,15 +45,15 @@ const CreateProjectDashboard = () => {
 		if (isSuccess) form.reset();
 	};
 	return (
-		<div className="w-full h-full md:ml-55 bg-[rgba(0,0,0,0.5)] dark:bg-zinc-900   overflow-hidden">
-			<div className="w-full h-full py-5 px-15">
-				<h1 className="text-2xl font-bold text-white ">Create Project</h1>
-				<div className="max-w-4xl  mt-10 border rounded-lg bg-black">
+		<div className="w-full h-full md:ml-55 bg-gray-100 dark:bg-neutral-900 overflow-hidden transition-colors duration-300">
+			<div className="w-full h-full py-5 px-8">
+				<h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Create Project</h1>
+				<div className="max-w-4xl mt-10 border border-gray-200 dark:border-zinc-700 rounded-2xl bg-white dark:bg-zinc-800 shadow-lg transition-colors duration-300">
 					<Form {...form}>
 						<form
-							onSubmit={form.handleSubmit(onSubmit)}
-							className="space-y-8 p-10"
-						>
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-8 p-10"
+            >
 							<FormField
 								control={form.control}
 								name="name"
