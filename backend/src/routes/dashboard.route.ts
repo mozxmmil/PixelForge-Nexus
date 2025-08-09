@@ -4,6 +4,7 @@ import {
 	createProject,
 	dashboard,
 	deleteProject,
+	getCurrentUser,
 	headerData,
 	headerSubData,
 	updateProject,
@@ -12,6 +13,7 @@ import { checkDashboard } from "../middleware/checkdashboard.middleware.js";
 
 const router: Router = express.Router();
 
+router.get("/getCurrentUser", checkAuth, getCurrentUser);
 router.get("/", checkAuth, dashboard);
 router.post("/createproject", checkAuth, checkDashboard, createProject);
 router.put("/updateproject/:id", checkAuth, checkDashboard, updateProject);

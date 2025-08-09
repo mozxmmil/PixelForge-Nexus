@@ -3,18 +3,13 @@ import ActiveProjectCard from "@/components/dashboard/activeProjectcard";
 import HeaderMetaData from "@/components/dashboard/headerMetaData";
 import RecentActivity from "@/components/dashboard/recentActively";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-    useGetAllProject
-} from "@/hook/dashbord.hook";
+import { useGetAllProject, useGetCurrentUser } from "@/hook/dashbord.hook";
 
-import {
-    FileWarning
-} from "lucide-react";
+import { FileWarning } from "lucide-react";
 
 export default function Dashboard() {
-	
 	const { data, isLoading } = useGetAllProject();
-
+	 useGetCurrentUser();
 
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-neutral-800 overflow-hidden relative">

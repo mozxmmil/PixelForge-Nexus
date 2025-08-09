@@ -283,3 +283,12 @@ export const headerSubData = async (req: Request, res: Response) => {
 		},
 	});
 };
+
+export const getCurrentUser = async (req: Request, res: Response) => {
+	const user = req.user;
+	return res.status(200).json({
+		success: true,
+		message: "current user",
+		data: user,
+	});
+};

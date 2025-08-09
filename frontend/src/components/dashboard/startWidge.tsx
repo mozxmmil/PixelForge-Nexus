@@ -4,7 +4,7 @@ interface StatWidgetProps {
 	icon: LucideIcon;
 	label: string;
 	value: string | number;
-	change: string ;
+	change: string;
 	changePositive?: boolean;
 	isLoading?: boolean;
 }
@@ -16,8 +16,6 @@ export default function StatWidget({
 	changePositive,
 	isLoading = false,
 }: StatWidgetProps) {
-	console.log(change);
-
 	if (isLoading) {
 		return (
 			<div className="flex items-center bg-white rounded-xl shadow p-4 gap-4 dark:bg-neutral-900 animate-pulse">

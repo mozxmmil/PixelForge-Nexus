@@ -1,12 +1,15 @@
 import { axiosInstance } from "@/lib/axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	FromSchema,
 	ProjectSummary,
 	Response,
 } from "@/types/zod/projectData.type.zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { exportPages } from "next/dist/export/worker";
+
+import { useUserStore } from "@/zustand/userData.zustand";
+import { useEffect } from "react";
+import type { user } from "@/zustand/userData.zustand";
 
 export const useGetAllProject = () => {
 	const data = useQuery<Response>({
@@ -23,7 +26,6 @@ export const useCreateProject = () => {
 	const client = useQueryClient();
 	const data = useMutation({
 		mutationFn: async (projectData: FromSchema) => {
-			console.log(projectData);
 			const response = await axiosInstance.post(
 				"/api/dashboard/createproject",
 				projectData
@@ -63,4 +65,19 @@ export const useHeaderMetaData = () => {
 		},
 	});
 	return data;
+};
+
+export const useGetCurrentUser = () => {
+	const setUser = useUserStore((state) => state.setUser);
+	const data = useQuery({
+		queryKey: ["current-user"],
+		queryFn: async () => {
+			const response = await axiosInstance.get(
+				"/api/dashboard/getCurrentUser"
+			);
+
+			return response.data;
+		},
+	});
+	setUser(data.data.data);
 };
