@@ -76,8 +76,8 @@ export const useGetCurrentUser = () => {
 				"/api/dashboard/getCurrentUser"
 			);
 
-			return response.data;
+			return response?.data;
 		},
 	});
-	setUser(data.data.data);
+	setUser(data?.data?.data);
 };

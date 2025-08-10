@@ -9,7 +9,7 @@ import { FileWarning } from "lucide-react";
 
 export default function Dashboard() {
 	const { data, isLoading } = useGetAllProject();
-	 useGetCurrentUser();
+	useGetCurrentUser();
 
 	return (
 		<div className="min-h-screen bg-gray-50 dark:bg-neutral-800 overflow-hidden relative">
